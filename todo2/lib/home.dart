@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:todo2/model/todo.dart";
+import "package:todo2/todo_item.dart";
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -22,6 +23,12 @@ class _HomeState extends State<Home> {
         text: "E-Commerce App",
         description: "An e-commerce app for selling products"),
   ];
+
+  void removeSelectedTodo(String text) {
+    setState(() {
+      _todoData.where((todo) => todo.text != text);
+    });
+  }
 
   @override
   Widget build(context) {
@@ -87,42 +94,11 @@ class _HomeState extends State<Home> {
               width: double.infinity,
               child: ListView(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
-                      Dismissible(
-                        key: Key(_todoData[0].text),
-                        child: Container(
-                          height: 100,
-                          width: 320,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 178, 122, 233),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _todoData[0].text,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                _todoData[0].description,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  )
+                  ..._todoData.map((td) => TodoItem(
+                        text: td.text,
+                        description: td.description,
+                        removeSelectedTodo: removeSelectedTodo,
+                      ))
                 ],
               ),
             ),
